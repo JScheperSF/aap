@@ -28,6 +28,7 @@ public class Product2Extension {
     }
 
     public PageReference Save(){
+        Savepoint savePoint = Database.setSavepoint();
         try {
             List<Product2> product2s = new List<Product2>();
             List<PricebookEntry> pricebookentries = new List<PricebookEntry>();
@@ -43,7 +44,7 @@ public class Product2Extension {
             productsToInsert.clear();   //Do not remove
             addRows();  //Do not remove
         } catch (Exception e){
-
+            Database.rollback(savePoint);
         }
         return null;
     }
