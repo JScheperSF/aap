@@ -52,7 +52,7 @@ public class Product2Helper {
                         )
                         ){
                     insert new FeedItem(
-                            Body=p.Name+' Quantity is down to '+p.Quantity_Remaining__c,
+                            Body=p.Name + ' ' + Constants.INVENTORY_LEVEL_LOW + '. Quantity is down to ' + p.Quantity_Remaining__c,
                             ParentId = p.Id
                     );
                 }
