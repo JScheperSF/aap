@@ -56,6 +56,10 @@ public class Product2Extension {
     }
 
     public class ProductWrapper {
+        ProductWrapper() {
+            productRecord = new Product2();
+            pricebookEntryRecord = new PricebookEntry();
+        }
         public Product2 productRecord {get;set;}
         public PricebookEntry pricebookEntryRecord {get;set;}
     }
