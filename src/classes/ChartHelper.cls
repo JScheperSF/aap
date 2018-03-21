@@ -1,5 +1,6 @@
 public without sharing class ChartHelper {
 
+    @AuraEnabled
     public static List<chartData> GetInventory(){
         AggregateResult[] arResults = [SELECT Family, SUM(Quantity_Remaining__c) Quantity
             FROM Product2
