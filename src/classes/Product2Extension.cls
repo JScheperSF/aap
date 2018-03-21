@@ -18,8 +18,8 @@ public class Product2Extension {
     }
 
     public List<SelectOption> GetFamilyOptions() {
-        List<SelectOption> selectOptions = new List<SelectOption>();
-        selectOptions.add(new SelectOption('', Constants.SELECT_ONE));
+        List<SelectOption> selectOptions = new List<SelectOption>{new SelectOption('', Constants.SELECT_ONE)};
+
         for (Schema.PicklistEntry entry : Constants.PRODUCT_FAMILY) {
             selectOptions.add(new SelectOption(entry.label, entry.value));
         }
@@ -27,7 +27,7 @@ public class Product2Extension {
         return selectOptions;
     }
 
-            public PageReference Save(){
+    public PageReference Save(){
         try {
             insert productsToInsert;
 
