@@ -18,7 +18,7 @@ public class Product2Helper {
      * @param List<Product2> newList
      * @param List<Product2> oldList
     **/
-    public static void AfterUpdate(){
+    public static void AfterUpdate(List<Product2> newList, List<Product2> oldList){
         //ToDo: Declare a List of Product2 records named needsAnnouncement
 
         //ToDo: Declare a Map of Strings to Inventory_Setting__mdt records
@@ -31,6 +31,35 @@ public class Product2Helper {
         //      add it to the needsAnnouncement list
 
         //ToDo: Pass records to the postAlerts method
+
+
+
+
+
+
+
+
+
+        //This code comes from the trigger as originally offered by the challenge and is marked as faulty...
+        try {
+            for ( Product2 p : newList ){
+                if (
+                        p.Id != null && (
+                                ( p.Family == 'Entree' && p.Quantity_Remaining__c < 20 )||
+                                        ( p.Family == 'Side' && p.Quantity_Remaining__c < 10 )||
+                                        ( p.Family == 'Dessert' && p.Quantity_Remaining__c < 15 )||
+                                        ( p.Family == 'Beverage' && p.Quantity_Remaining__c < 5 )
+                        )
+                        ){
+                    insert new FeedItem(
+                            Body=p.Name+' Quantity is down to '+p.Quantity_Remaining__c,
+                            ParentId = p.Id
+                    );
+                }
+            }
+        } catch ( Exception e ){
+            //A good developer would do something with this Exception!
+        }
     }
 
     /**
