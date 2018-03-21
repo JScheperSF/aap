@@ -2,7 +2,7 @@
  * @name AnnouncementQueueable
  * @description This class posts Chatter Announcements
 **/
-public class AnnouncementQueueable {
+public class AnnouncementQueueable implements Queueable{
 
     public List<ConnectApi.AnnouncementInput> toPost;
 
@@ -27,6 +27,16 @@ public class AnnouncementQueueable {
             q.toPost = announcements;
 
             //ToDo: Enqueue the above instance of announcementQueueable
+            System.enqueueJob(q);
+        }
+    }
+
+    public void execute(QueueableContext qc) {
+        List<Community> comm = [SELECT Id FROM Community WHERE Name = 'Inventory Announcements'];
+        System.assert(comm.size() == 0, 'Found multiple communities called "Inventory Announcements", where only one was expected.');
+
+        for (ConnectApi.AnnouncementInput announcement : toPost) {
+            ConnectApi.Announcements.postAnnouncement(String.valueOf(comm.get(0).Id), announcement);
         }
     }
 
