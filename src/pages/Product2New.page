@@ -27,7 +27,7 @@
                         <apex:inputField value="{!p.productRecord.isActive}" />
                     </apex:column>
                     <apex:column headerValue="{!$ObjectType.PricebookEntry.fields.UnitPrice.label}" >
-                        <inputText value="UnitPrice" />
+                        <apex:inputField value="{!p.pricebookEntryRecord.UnitPrice}" />
                     </apex:column>
                     <apex:column headerValue="{!$ObjectType.Product2.fields.Initial_Inventory__c.label}" >
                         <apex:inputField value="{!p.productRecord.Initial_Inventory__c}" />
