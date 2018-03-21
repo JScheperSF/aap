@@ -11,7 +11,6 @@ public without sharing class ChartHelper {
         for (AggregateResult ar : arResults) {
             cht.add(new ChartData((String)ar.get('Family'), (Decimal)ar.get('Quantity')));
         }
-
         return cht;
     }
 
