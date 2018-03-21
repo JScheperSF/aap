@@ -32,15 +32,19 @@ public class Product2Extension {
         try {
             List<Product2> product2s = new List<Product2>();
             for (ProductWrapper productWrapper : productsToInsert) {
-                product2s.add(productWrapper.productRecord);
+                if (allFieldAreFilled(productWrapper)) {
+                    product2s.add(productWrapper.productRecord);
+                }
             }
             insert product2s;
 
             List<PricebookEntry> pricebookentries = new List<PricebookEntry>();
             for (ProductWrapper productWrapper : productsToInsert) {
-                productWrapper.pricebookEntryRecord.Product2Id = productWrapper.productRecord.id;
-                productWrapper.pricebookEntryRecord.Pricebook2Id = Constants.STANDARD_PRICEBOOK_ID;
-                pricebookentries.add(productWrapper.pricebookEntryRecord);
+                if (allFieldAreFilled(productWrapper)) {
+                    productWrapper.pricebookEntryRecord.Product2Id = productWrapper.productRecord.id;
+                    productWrapper.pricebookEntryRecord.Pricebook2Id = Constants.STANDARD_PRICEBOOK_ID;
+                    pricebookentries.add(productWrapper.pricebookEntryRecord);
+                }
             }
             insert pricebookentries;
 
@@ -53,6 +57,12 @@ public class Product2Extension {
             Database.rollback(savePoint);
         }
         return null;
+    }
+
+    private Boolean allFieldAreFilled(ProductWrapper productWrapper) {
+        return productWrapper.productRecord.Name != ''
+                && productWrapper.productRecord.Family != ''
+                && productWrapper.productRecord.Initial_Inventory__c > 0;
     }
 
     public class ProductWrapper {
