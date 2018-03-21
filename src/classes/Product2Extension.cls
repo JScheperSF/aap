@@ -31,12 +31,17 @@ public class Product2Extension {
         Savepoint savePoint = Database.setSavepoint();
         try {
             List<Product2> product2s = new List<Product2>();
-            List<PricebookEntry> pricebookentries = new List<PricebookEntry>();
             for (ProductWrapper productWrapper : productsToInsert) {
                 product2s.add(productWrapper.productRecord);
-                pricebookentries.add(productWrapper.pricebookEntryRecord);
             }
             insert product2s;
+
+            List<PricebookEntry> pricebookentries = new List<PricebookEntry>();
+            for (ProductWrapper productWrapper : productsToInsert) {
+                productWrapper.pricebookEntryRecord.Product2Id = productWrapper.productRecord.id;
+                productWrapper.pricebookEntryRecord.Pricebook2Id = Constants.STANDARD_PRICEBOOK_ID;
+                pricebookentries.add(productWrapper.pricebookEntryRecord);
+            }
             insert pricebookentries;
 
             //If successful clear the list and display an informational message
