@@ -17,7 +17,17 @@ public class Product2Extension {
         return ChartHelper.GetInventory();
     }
 
-    public PageReference Save(){
+    public List<SelectOption> GetFamilyOptions() {
+        List<SelectOption> selectOptions = new List<SelectOption>();
+        selectOptions.add(new SelectOption('', Constants.SELECT_ONE));
+        for (Schema.PicklistEntry entry : Constants.PRODUCT_FAMILY) {
+            selectOptions.add(new SelectOption(entry.label, entry.value));
+        }
+
+        return selectOptions;
+    }
+
+            public PageReference Save(){
         try {
             insert productsToInsert;
 

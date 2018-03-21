@@ -20,6 +20,7 @@
                     </apex:column>
                     <apex:column headerValue="{!$ObjectType.Product2.fields.Family.label}" >
                         <apex:selectList value="{!p.Family}" size="1" multiselect="false" >
+                            <apex:selectOptions value="{!FamilyOptions}" />
                         </apex:selectList>
                     </apex:column>
                     <apex:column headerValue="{!$ObjectType.Product2.fields.IsActive.label}" >
