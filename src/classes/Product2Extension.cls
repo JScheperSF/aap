@@ -1,15 +1,15 @@
 public class Product2Extension {
 
-    public List<Product2> productsToInsert {get;set;}
+    public List<ProductWrapper> productsToInsert {get;set;}
 
     public Product2Extension(){
-        productsToInsert = new List<Product2>();
+        productsToInsert = new List<ProductWrapper>();
         addRows();
     }
 
     public void AddRows(){
         for ( Integer i=0; i < Constants.DEFAULT_ROWS; i++ ){
-            productsToInsert.add( new Product2() );
+            productsToInsert.add( new ProductWrapper() );
         }
     }
 
@@ -29,7 +29,14 @@ public class Product2Extension {
 
     public PageReference Save(){
         try {
-            insert productsToInsert;
+            List<Product2> product2s = new List<Product2>();
+            List<PricebookEntry> pricebookentries = new List<PricebookEntry>();
+            for (ProductWrapper productWrapper : productsToInsert) {
+                product2s.add(productWrapper.productRecord);
+                pricebookentries.add(productWrapper.pricebookEntryRecord);
+            }
+            insert product2s;
+            insert pricebookentries;
 
             //If successful clear the list and display an informational message
             apexPages.addMessage(new ApexPages.message(ApexPages.Severity.INFO,productsToInsert.size()+' Inserted'));
@@ -41,4 +48,8 @@ public class Product2Extension {
         return null;
     }
 
+    public class ProductWrapper {
+        public Product2 productRecord {get;set;}
+        public PricebookEntry pricebookEntryRecord {get;set;}
+    }
 }
