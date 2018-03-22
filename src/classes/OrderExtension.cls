@@ -17,15 +17,24 @@ public class OrderExtension {
 
     public Map<Id,OrderItem> orderItemMap;
     ApexPages.StandardSetController standardSetController;
+    ApexPages.StandardController standardController;
 
     public OrderExtension(ApexPages.StandardController standardController){
+        List<Product2> allproducts = [SELECT Name FROM Product2 WHERE Name LIKE 'Product%' LIMIT 10];
+        for (Product2 product : allproducts) {
+            System.debug(product);
+        }
+        delete allproducts;
+
+        this.standardController = standardController;
         orderRecord = (Order)standardController.getRecord();
         orderItemMap = new Map<id,OrderItem>();
+        orderItemList = new List<OrderItem>();
         if ( orderRecord.Id != null ){
             orderRecord = queryOrderRecord(orderRecord.Id);
         }
 
-        List<Product2> products = [SELECT Quantity_Ordered__c FROM Product2 WHERE Id = :orderRecord.Id]; // Must likely be updated. Use it now for getting the standardSetController up and running.
+        List<Product2> products = [SELECT Quantity_Ordered__c FROM Product2];// WHERE Id = :orderRecord.Id]; // Must likely be updated. Use it now for getting the standardSetController up and running.
         standardSetController = new ApexPages.StandardSetController(products);
         standardSetController.setPageSize(defaultRowsInTable);
     }
@@ -58,7 +67,12 @@ public class OrderExtension {
     **/
     public void Save(){
         //ToDo: Implement logic to save the Order and populated OrderItems
-
+        Savepoint savepoint = Database.SetSavepoint();
+        try {
+            standardController.Save();
+        } catch(Exception e) {
+            Database.rollback(savepoint);
+        }
     }
 
 
@@ -67,7 +81,7 @@ public class OrderExtension {
      * @description
     **/
     public void First(){
-        standardSetController.First();
+        standardSetController.first();
     }
 
 
@@ -76,7 +90,7 @@ public class OrderExtension {
      * @description
     **/
     public void Next(){
-        standardSetController.Next();
+        standardSetController.next();
     }
 
 
@@ -85,7 +99,7 @@ public class OrderExtension {
      * @description
     **/
     public void Previous(){
-        standardSetController.Previous();
+        standardSetController.previous();
     }
 
     /**
@@ -93,7 +107,7 @@ public class OrderExtension {
      * @description
     **/
     public void Last(){
-        standardSetController.Last();
+        standardSetController.last();
     }
 
     /**
@@ -117,7 +131,9 @@ public class OrderExtension {
      * @description
     **/
     public Integer GetTotalPages(){
-        return standardSetController.getResultSize() / standardSetController.getPageSize();
+        Integer totalPages = (Integer)Math.ceil(standardSetController.getResultSize() / (Decimal)Constants.DEFAULT_ROWS);
+        System.debug('############ totalPages: ' + totalPages);
+        return totalPages;
     }
 
     /**
@@ -125,7 +141,7 @@ public class OrderExtension {
      * @description
     **/
     public Integer GetPageNumber(){
-        return null;
+        return standardSetController.getPageNumber();
     }
 
     /**
