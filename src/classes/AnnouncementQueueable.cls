@@ -29,7 +29,7 @@ public class AnnouncementQueueable implements Queueable{
 
     public void execute(QueueableContext qc) {
         List<Community> comm = [SELECT Id FROM Community WHERE Name = 'Inventory Announcements'];
-        System.assert(comm.size() == 0, 'Found multiple communities called "Inventory Announcements", where only one was expected.');
+        System.assert(comm.size() == 1, 'Found multiple communities called "Inventory Announcements", where only one was expected.');
 
         for (ConnectApi.AnnouncementInput announcement : toPost) {
             ConnectApi.Announcements.postAnnouncement(String.valueOf(comm.get(0).Id), announcement);
