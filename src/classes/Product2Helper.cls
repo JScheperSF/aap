@@ -9,6 +9,7 @@ public class Product2Helper {
         FROM CollaborationGroup
         WHERE Name = 'group name'
         OR Name = :('TEST'+'group name')
+        OR Name = :('TEST' + Constants.INVENTORY_ANNOUNCEMENTS)
         LIMIT 1
     ];
 
