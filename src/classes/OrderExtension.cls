@@ -24,11 +24,11 @@ public class OrderExtension {
         if ( orderRecord.Id != null ){
             orderRecord = queryOrderRecord(orderRecord.Id);
         }
+
     }
 
     //ToDo: Implement your own method to populate orderItemList
     //  that you will call after pagination and/or family selection
-
 
     /**
      * @name OnFieldChange
@@ -64,7 +64,7 @@ public class OrderExtension {
      * @description
     **/
     public void First(){
-
+        standardSetController.First();
     }
 
 
@@ -73,7 +73,7 @@ public class OrderExtension {
      * @description
     **/
     public void Next(){
-
+        standardSetController.Next();
     }
 
 
@@ -82,7 +82,7 @@ public class OrderExtension {
      * @description
     **/
     public void Previous(){
-
+        standardSetController.Previous();
     }
 
     /**
@@ -90,7 +90,7 @@ public class OrderExtension {
      * @description
     **/
     public void Last(){
-
+        standardSetController.Last();
     }
 
     /**
@@ -98,7 +98,7 @@ public class OrderExtension {
      * @description
     **/
     public Boolean GetHasPrevious(){
-        return null;
+        return standardSetController.getHasPrevious();
     }
 
     /**
@@ -106,7 +106,7 @@ public class OrderExtension {
      * @description
     **/
     public Boolean GetHasNext(){
-        return null;
+        return standardSetController.getHasNext();
     }
 
     /**
