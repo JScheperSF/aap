@@ -25,6 +25,9 @@ public class OrderExtension {
             orderRecord = queryOrderRecord(orderRecord.Id);
         }
 
+        List<Product2> products = [SELECT Quantity_Ordered__c FROM Product2 WHERE Id = :orderRecord.Id]; // Must likely be updated. Use it now for getting the standardSetController up and running.
+        standardSetController = new ApexPages.StandardSetController(products);
+        standardSetController.setPageSize(defaultRowsInTable);
     }
 
     //ToDo: Implement your own method to populate orderItemList
@@ -114,7 +117,7 @@ public class OrderExtension {
      * @description
     **/
     public Integer GetTotalPages(){
-        return null;
+        return standardSetController.getResultSize() / standardSetController.getPageSize();
     }
 
     /**
