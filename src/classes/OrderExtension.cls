@@ -9,6 +9,11 @@ public class OrderExtension {
     public String selectedFamily {get;set;}
     public List<chartHelper.chartData> pieData {get;set;}
     public Decimal total {get;set;}
+    public Integer defaultRowsInTable {
+        get {
+            return Constants.DEFAULT_ROWS;
+        }
+    }
 
     public Map<Id,OrderItem> orderItemMap;
     ApexPages.StandardSetController standardSetController;

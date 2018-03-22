@@ -40,7 +40,7 @@
                         </apex:selectList>
                     </apex:pageBlockSectionItem>
                 </apex:pageBlockSection>
-                <apex:pageBlockTable value="{!orderItemList}" var="o" >
+                <apex:pageBlockTable value="{!orderItemList}" var="o" rows="{!defaultRowsInTable}">
                     <apex:column headerValue="Qty">
                         <apex:inputField value="{!o.Quantity}" >
                             <apex:actionSupport event="onchange" action="{!onFieldChange}" reRender="pageMessages, summary" />
