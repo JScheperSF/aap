@@ -6,14 +6,11 @@ public class AnnouncementQueueable implements Queueable{
 
     public List<ConnectApi.AnnouncementInput> toPost;
 
-    //ToDo: Modify this class to implement the Queueable interface and call the postAnnouncements method
-
-
     /**
      * @name postAnnouncements
      * @description This method is provided for you to facilitate the Super Badge
     **/
-    public static void PostAnnouncements(List<ConnectApi.AnnouncementInput> announcements){
+    public void PostAnnouncements(List<ConnectApi.AnnouncementInput> announcements){
         while ( announcements.size() > 0 ){
             if ( Limits.getDMLStatements() < Limits.getLimitDMLStatements() && !test.isRunningTest() ){
                 ConnectApi.AnnouncementInput a = announcements.remove(0);
@@ -26,7 +23,6 @@ public class AnnouncementQueueable implements Queueable{
             AnnouncementQueueable q = new AnnouncementQueueable();
             q.toPost = announcements;
 
-            //ToDo: Enqueue the above instance of announcementQueueable
             System.enqueueJob(q);
         }
     }
@@ -39,5 +35,4 @@ public class AnnouncementQueueable implements Queueable{
             ConnectApi.Announcements.postAnnouncement(String.valueOf(comm.get(0).Id), announcement);
         }
     }
-
 }
