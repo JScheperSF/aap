@@ -63,7 +63,7 @@
                 </apex:pageBlockTable>
             </apex:pageBlock>
             <center>
-                <apex:panelGrid id="pagination" columns="9" >
+                <apex:panelGrid id="pagination" columns="9" rendered="{! totalPages != null && totalPages > 1}" >
                 <apex:commandButton value="<< First" disabled="{!hasPrevious==false}" action="{!first}" reRender="pageMessages, pagination, orderItemTable" />
                 <span>&nbsp;&nbsp;</span>
                 <apex:commandButton value="< Previous" disabled="{!hasPrevious==false}" action="{!previous}" reRender="pageMessages, pagination, orderItemTable" />

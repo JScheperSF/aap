@@ -20,12 +20,6 @@ public class OrderExtension {
     ApexPages.StandardController standardController;
 
     public OrderExtension(ApexPages.StandardController standardController){
-        List<Product2> allproducts = [SELECT Name FROM Product2 WHERE Name LIKE 'Product%' LIMIT 10];
-        for (Product2 product : allproducts) {
-            System.debug(product);
-        }
-        delete allproducts;
-
         this.standardController = standardController;
         orderRecord = (Order)standardController.getRecord();
         orderItemMap = new Map<id,OrderItem>();
