@@ -8,5 +8,5 @@ public class Constants {
     public static final String ACTIVATED_ORDER_STATUS = 'Activated';
     public static final String INVENTORY_ANNOUNCEMENTS = 'Inventory Announcements';
     public static final String ERROR_MESSAGE = 'An error has occurred, please take a screenshot with the URL and send it to IT.';
-    public static final Id STANDARD_PRICEBOOK_ID = Id.valueOf('01s1r000002f5D7AAI'); // Value returned by Test.getStandardPricebookId()
+    public static final Id STANDARD_PRICEBOOK_ID = '01s1r000002dG7MAAU'; // Value returned by Test.getStandardPricebookId()
 }

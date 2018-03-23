@@ -2,6 +2,10 @@
  * @name TestDataFactory
  * @description Contains methods to construct and/or validate commonly used records
 **/
+/**
+ * @name TestDataFactory
+ * @description Contains methods to construct and/or validate commonly used records
+**/
 public with sharing class TestDataFactory {
 
     /**
@@ -147,26 +151,26 @@ public with sharing class TestDataFactory {
     public static void InsertTestData(Integer cnt){
         //ToDo: Ensure this method calls each of the construct methods
         //  and inserts the results for use as test data.
-        CollaborationGroup collaborationGroup = ConstructCollaborationGroup();
-        insert collaborationGroup;
-
-        List<Product2> products = ConstructProducts(cnt);
-        insert products;
-
-        List<PricebookEntry> pricebookentries = ConstructPricebookEntries(products);
-        insert pricebookentries;
-
-        List<Account> accounts = ConstructAccounts(cnt);
-        insert accounts;
-
-        List<Contact> contacts = ConstructContacts(cnt, accounts);
-        insert contacts;
-
-        List<Order> orders = ConstructOrders(cnt, accounts);
-        insert orders;
-
-        List<OrderItem> orderItems = ConstructOrderItems(cnt, pricebookentries, orders);
-        insert orderItems;
+//        CollaborationGroup collaborationGroup = ConstructCollaborationGroup();
+//        insert collaborationGroup;
+//
+//        List<Product2> products = ConstructProducts(cnt);
+//        insert products;
+//
+//        List<PricebookEntry> pricebookentries = ConstructPricebookEntries(products);
+//        insert pricebookentries;
+//
+//        List<Account> accounts = ConstructAccounts(cnt);
+//        insert accounts;
+//
+//        List<Contact> contacts = ConstructContacts(cnt, accounts);
+//        insert contacts;
+//
+//        List<Order> orders = ConstructOrders(cnt, accounts);
+//        insert orders;
+//
+//        List<OrderItem> orderItems = ConstructOrderItems(cnt, pricebookentries, orders);
+//        insert orderItems;
     }
 
     public static void VerifyQuantityOrdered(Product2 originalProduct, Product2 updatedProduct, Integer qtyOrdered) {

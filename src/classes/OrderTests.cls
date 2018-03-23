@@ -1,10 +1,10 @@
 @isTest
 private class OrderTests {
 
-    @TestSetup
-    static void SetupTestData() {
-        TestDataFactory.InsertTestData(6);
-    }
+//    @TestSetup
+//    static void SetupTestData() {
+//        TestDataFactory.InsertTestData(1);
+//    }
 
     @IsTest
     static void OrderUpdate_UnitTest() {
@@ -25,4 +25,64 @@ private class OrderTests {
         }
     }
 
+    @IsTest(SeeAllData=true)
+    static void PaginationPreserveValues() {
+        orderExtension ext = new orderExtension(new apexPages.standardController(new Order()));
+        ext.orderItemList[0].Quantity = 1;
+        ext.orderItemList[0].UnitPrice = 1;
+        ext.orderItemList[1].Quantity = 2;
+        ext.orderItemList[1].UnitPrice = 2;
+        ext.OnFieldChange();
+        ext.next();
+        system.assert(ext.orderItemList[0].Quantity != 1);
+        system.assert(ext.orderItemList[0].UnitPrice != 1);
+        system.assert(ext.orderItemList[1].Quantity != 2);
+        system.assert(ext.orderItemList[1].UnitPrice != 2);
+        ext.previous();
+        system.assert(ext.orderItemList[0].Quantity == 1);
+        system.assert(ext.orderItemList[0].UnitPrice == 1);
+        system.assert(ext.orderItemList[1].Quantity == 2);
+        system.assert(ext.orderItemList[1].UnitPrice == 2);
+    }
+
+    @IsTest(SeeAllData=true)
+    static void PieChartUpdate() {
+        Map<Id,Product2> productMap = new Map<Id,Product2>([SELECT Id,Name FROM Product2]);
+        Map<Id,PricebookEntry> pricebookEntryMap = new Map<Id,PricebookEntry>([SELECT Id,Name FROM PricebookEntry]);
+
+        Map<String,Decimal> chartMap = new Map<String,Decimal>();
+        orderExtension ext = new orderExtension(new apexPages.standardController(new order()));
+        ext.orderItemList[0].Quantity = 1;
+        ext.orderItemList[0].UnitPrice = 1;
+        ext.orderItemList[1].Quantity = 2;
+        ext.orderItemList[1].UnitPrice = 2;
+        for (OrderItem oi : ext.orderItemList ){
+            String name;
+            if (oi.Product2 != null && String.isNotBlank(oi.Product2.Name) ){
+                name = oi.Product2.Name;
+            }
+            else if ( oi.PricebookEntryId != null && String.isNotBlank(oi.PricebookEntry.Name) ){
+                name = oi.PricebookEntry.Name;
+            }
+            else if ( oi.Product2Id != null ){
+                name = productMap.get(oi.Product2Id).Name;
+            }
+            else if ( oi.PricebookEntryId != null ){
+                name = pricebookEntryMap.get(oi.PricebookEntryId).Name;
+            }
+            if ( String.isNotblank(name) && oi.Quantity != null && oi.UnitPrice != null ){
+                Decimal x = 0;
+                if ( chartMap.containsKey(oi.Product2.Name) ){
+                    x = chartMap.get(oi.Product2.Name);
+                }
+                x += ( oi.Quantity * oi.UnitPrice );
+                chartMap.put(oi.Product2.Name,x);
+            }
+        }
+        ext.onFieldChange();
+
+        for ( chartHelper.chartData cd : ext.pieData ){
+        system.assert( cd.val == chartMap.get(cd.name), cd.name+': '+cd.val + '!='+ chartMap.get(cd.name) );
+        }
+    }
 }
