@@ -117,7 +117,6 @@ public without sharing class OrderExtension {
      * @description
      **/
     public void Save(){
-
         System.Savepoint sp = Database.setSavepoint();
 
         try {
@@ -143,7 +142,6 @@ public without sharing class OrderExtension {
 
             upsert orderItemsToUpsert;
             delete orderItemsToDelete;
-
         } catch (Exception e){
             Database.rollback(sp);
             apexPages.addMessage(new ApexPages.message(ApexPages.Severity.INFO,Constants.ERROR_MESSAGE));
@@ -159,7 +157,6 @@ public without sharing class OrderExtension {
         loadData();
     }
 
-
     /**
      * @name Next
      * @description
@@ -168,7 +165,6 @@ public without sharing class OrderExtension {
         standardSetController.next();
         loadData();
     }
-
 
     /**
      * @name Previous

@@ -1,50 +1,69 @@
-@isTest
+@isTest (seeAllData=false)
 private class Product2Tests {
 
     /**
      * @name product2Extension_UnitTest
      * @description UnitTest for product2Extension
-    **/
-    @IsTest
-    static void GetStandardPricebookId() {
-        System.Assert(false, 'Test.getStandardPricebookId(): ' + Test.getStandardPricebookId());
-    }
+     **/
+    @isTest static void Product2Extension_UnitTest(){
 
-    @IsTest
-    static void Product2Extension_UnitTest(){
-        // Simulate a user's visit
+        Test.startTest();
+
         PageReference pageRef = Page.Product2New;
         Test.setCurrentPage(pageRef);
 
-        // When the page is opened, I expect only Constants.DEFAULT_ROWS items
-        Product2 someProduct = new Product2(Name='Test', IsActive=true);
-        Product2Extension ext = new Product2Extension(new ApexPages.StandardController(someProduct));
+        Product2 prod = new Product2(name='Test',isActive=true);
+        ApexPages.StandardController stdcontroller = new ApexPages.StandardController(prod);
+
+        Product2Extension ext = new Product2Extension(stdcontroller);
         System.assertEquals(Constants.DEFAULT_ROWS, ext.productsToInsert.size());
 
-        // When the add button is pressed, I expect that Constants.DEFAULT_ROWS are added to the page
-        ext.addRows();
-        System.assertEquals(2 * Constants.DEFAULT_ROWS, ext.productsToInsert.size());
+        ext.AddRows();
+        System.assertEquals(Constants.DEFAULT_ROWS * 2, ext.productsToInsert.size());
 
-        // When the save button is pressed, ?? only the records with all fields filled should be saved ??
-        Integer countProductBefore  = [SELECT COUNT() FROM Product2];
-        for (Integer i = 0; i < Constants.DEFAULT_ROWS; i++) {
-            Product2Extension.ProductWrapper productWrapper = ext.productsToInsert.get(i);
-            productWrapper.productRecord.Name = 'Test ' + i;
-            productWrapper.productRecord.Family = Constants.PRODUCT_FAMILY.get(math.mod(i,Constants.PRODUCT_FAMILY.size())).value;
-            productWrapper.productRecord.IsActive = true;
-            productWrapper.productRecord.Initial_Inventory__c = i+1;
+        for (Integer i = 0; i < 5; i++) {
+            Product2Extension.ProductWrapper wrapper = ext.productsToInsert[i];
+            Product2 p = new Product2();
+            p.Name = 'Test Product ' + i;
+            p.IsActive = true;
+            p.Initial_Inventory__c = 20;
+            p.Family = Constants.PRODUCT_FAMILY[0].getValue();
+            wrapper.productRecord = p;
 
-            productWrapper.pricebookEntryRecord.UnitPrice = i+1 * 3;
-            productWrapper.pricebookEntryRecord.IsActive = true;
-
-            System.Debug(productWrapper);
+            PricebookEntry pbe = new PricebookEntry();
+            pbe.IsActive = true;
+            pbe.UnitPrice = 10;
+            wrapper.pricebookEntryRecord = pbe;
         }
-        Test.startTest();
-            ext.save();
+
+        ext.save();
+        ext.GetFamilyOptions();
+        ext.GetInventory();
         Test.stopTest();
 
-        Integer countProductsAfter = [SELECT COUNT() FROM Product2];
-        System.assertEquals(countProductBefore + Constants.DEFAULT_ROWS, countProductsAfter);
+        List<Product2> createdProducts = [SELECT Id FROM Product2];
+        System.assertEquals(5, createdProducts.size());
     }
 
+    @isTest static void Product2Trigger_UnitTest(){
+
+        Test.startTest();
+        Product2 p = new Product2();
+        p.Name = 'TestProduct';
+        p.Family = 'Side';
+        p.IsActive = true;
+        p.Quantity_Ordered__c = 50;
+        p.Initial_Inventory__c = 100;
+        insert p;
+
+//        CollaborationGroup c = new CollaborationGroup();
+//        c.Name = 'TEST' + Constants.INVENTORY_ANNOUNCEMENTS;
+//        c.Description = 'test';
+//        c.CollaborationType = 'Public';
+//        insert c;
+
+        p.Quantity_Ordered__c=96;
+        update p;
+        Test.stopTest();
+    }
 }
