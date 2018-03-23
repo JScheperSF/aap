@@ -6,6 +6,11 @@ private class Product2Tests {
      * @description UnitTest for product2Extension
     **/
     @IsTest
+    static void GetStandardPricebookId() {
+        System.Assert(false, 'Test.getStandardPricebookId(): ' + Test.getStandardPricebookId());
+    }
+
+    @IsTest
     static void Product2Extension_UnitTest(){
         // Simulate a user's visit
         PageReference pageRef = Page.Product2New;

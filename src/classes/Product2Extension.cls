@@ -1,4 +1,4 @@
-public class Product2Extension {
+public without sharing class Product2Extension {
 
     public List<ProductWrapper> productsToInsert {get;set;}
 

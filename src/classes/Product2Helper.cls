@@ -1,4 +1,4 @@
-public class Product2Helper {
+public without sharing class Product2Helper {
 
     /**
      * @name COLLABORATION_GROUP

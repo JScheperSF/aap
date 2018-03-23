@@ -9,6 +9,11 @@ public without sharing class OrderExtension {
     public String selectedFamily {get; set;}
     public List<chartHelper.chartData> pieData {get; set;}
     public Decimal total {get; set;}
+    public Integer defaultRowsInTable {
+        get {
+            return Constants.DEFAULT_ROWS;
+        }
+    }
 
     public Map<Id,OrderItem> orderItemMap;
     ApexPages.StandardSetController standardSetController;
@@ -39,7 +44,7 @@ public without sharing class OrderExtension {
     }
 
     void refreshStandardSetController(){
-        String query = 'SELECT Name, Product2, Product2.Family, Product2.Name, Product2Id, UnitPrice, Product2.Quantity_Remaining__c FROM PricebookEntry WHERE IsActive = TRUE';
+        String query = 'SELECT Name, Product2.Family, Product2.Name, Product2Id, UnitPrice, Product2.Quantity_Remaining__c FROM PricebookEntry WHERE IsActive = TRUE';
 
         if(selectedFamily != null && selectedFamily != Constants.SELECT_ONE) {
             query += ' AND Product2.Family = \'' + selectedFamily + '\'';
@@ -121,30 +126,29 @@ public without sharing class OrderExtension {
             }
             upsert orderRecord;
 
-//            List<OrderItem> orderItemsToUpsert = new List<OrderItem>();
-//            List<OrderItem> orderItemsToDelete = new List<OrderItem>();
-//
-//            for (OrderItem oi : orderItemMap.values()) {
-//                if(oi.Quantity > 0) {
-//                    if(oi.OrderId == null) {
-//                        oi.OrderId = orderRecord.Id;
-//                    }
-//                    orderItemsToUpsert.add(oi);
-//                } else if(oi.Id != null) {
-//                    orderItemsToDelete.add(new OrderItem(id=oi.Id));
-//                    oi.Id = null;
-//                }
-//            }
-//
-//            upsert orderItemsToUpsert;
-//            delete orderItemsToDelete;
+            List<OrderItem> orderItemsToUpsert = new List<OrderItem>();
+            List<OrderItem> orderItemsToDelete = new List<OrderItem>();
+
+            for (OrderItem oi : orderItemMap.values()) {
+                if(oi.Quantity > 0) {
+                    if(oi.OrderId == null) {
+                        oi.OrderId = orderRecord.Id;
+                    }
+                    orderItemsToUpsert.add(oi);
+                } else if(oi.Id != null) {
+                    orderItemsToDelete.add(new OrderItem(id=oi.Id));
+                    oi.Id = null;
+                }
+            }
+
+            upsert orderItemsToUpsert;
+            delete orderItemsToDelete;
 
         } catch (Exception e){
             Database.rollback(sp);
             apexPages.addMessage(new ApexPages.message(ApexPages.Severity.INFO,Constants.ERROR_MESSAGE));
         }
     }
-
 
     /**
      * @name First
